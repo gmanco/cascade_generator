@@ -3,10 +3,10 @@ process_data <-
            numFactors,
            numCascades,
            numWords,
-           prefix,
            Tmax,
            Tim,
            gamma_params,
+           prefix,
            node_communities) {
     # Generate the data iteratively
     
@@ -22,7 +22,7 @@ process_data <-
     
     
     # Generate the influence matrices to be used for the cascade generation
-    if (node_communities == NULL) {
+    if (is.null(node_communities) ){
       out <- generateInfluenceMatrices(g, numNodes, numFactors)
     }
     else {
@@ -30,18 +30,19 @@ process_data <-
         generateInfluenceMatricesFromCommunity(g, numNodes, numFactors, node_communities)
     }
     
+    S = out[[1]]
+    A = out[[2]]
+    
     
     Phi <-
       generateFrequencyVecs(numFactors,
                             numWords,
-                            gamma_params[1],
-                            gamma_params[2],
-                            gamma_params[3],
-                            gamma_params[4],
-                            gamma_params[5])
+                            bias = gamma_params[1],
+                            blshape = gamma_params[2],
+                            blscale = gamma_params[3],
+                            tshape = gamma_params[4],
+                            tscale = gamma_params[5])
     
-    S = out[[1]]
-    A = out[[2]]
     
     # Cascades are generated as a matrix numCascades x numNodes. Each cell contains the activation time. cells with value 0 are not active
     out = generate_cascades(g,
@@ -141,5 +142,4 @@ process_data <-
       col.names = FALSE,
       row.names = FALSE
     )
-  }
 }

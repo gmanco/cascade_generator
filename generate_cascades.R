@@ -146,7 +146,7 @@ generateInfluenceMatrices <- function(g,numNodes,numFactors){
 # is used to introduce a random effect. The idea is the following: nodes susceptibility 
 # of a node within a community is inversely proportional to its outdegree, whereas
 #authoritativenes is proportional to its indegree
-generateInfluenceMatricesFromCommunity <- function(g, numNodes, numFactors,node_communities,lambda){
+generateInfluenceMatricesFromCommunity <- function(g, numNodes, numFactors,node_communities,lambda = 0.9){
    in.d.g = degree(g, mode = "in")
    in.d.g = in.d.g / max(in.d.g)
    
@@ -167,8 +167,8 @@ generateInfluenceMatricesFromCommunity <- function(g, numNodes, numFactors,node_
     #toss the coin based on lambda
     p = rbinom(1,1,prob = lambda)
     if (p==1){
-      S[node,K] = max(0.01,rnorm(1,mean = 1-out.d.g,sd = 0.05))
-      A[node,K] = in.d.g
+      S[node,K] = max(0.01,abs(rnorm(1,mean = 1-out.d.g[node],sd = 0.05)))
+      A[node,K] = max(0.01,abs(rnorm(1,mean = in.d.g[node],sd = 0.05)))
       
     } else {
       S[node,K] = runif(1,min= 0.1,max=1)
