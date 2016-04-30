@@ -6,10 +6,10 @@ library(gplots)
 
 #Some utility functions
 source(
-  "/Users/manco/Dropbox/shared ICAR/Influence_PP/exp/datasets/synth/data_generator/generate_cascades.R"
+  "/Users/manco/Dropbox/shared ICAR/Influence_PP/exp/datasets/synth/cascade_generator/generate_cascades.R"
 )
 source(
-  "/Users/manco/Dropbox/shared ICAR/Influence_PP/exp/datasets/synth/data_generator/output_format.R"
+  "/Users/manco/Dropbox/shared ICAR/Influence_PP/exp/datasets/synth/cascade_generator/output_format.R"
 )
 
 #set the path and choose the file to build cascades upon
@@ -51,13 +51,13 @@ gamma_params = c(bias,blshape,blscale,tshape,tscale)
 
 for (u in cmin:cmax) {
   numCascades = 2 ^ u
-  numNodes = vcount(g)
+  
   
   # generate the graph
   # NOTICE: the node names are those denoted in the edgeListFile
   g = graph.data.frame(dat, directed = TRUE)
   
-  
+  numNodes = vcount(g)
   #OPTIONAL: plot the graph to verify
   #igraph.options(vertex.size=0.2, vertex.label=NA, edge.arrow.size=0.1)
   #plot(g, layout=layout.kamada.kawai)
